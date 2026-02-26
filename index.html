@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ku">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کۆنتڕۆڵی پارێزراو</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            width: 300px;
+        }
+
+        #number {
+            font-size: 100px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2d3436;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-direction: row-reverse;
+        }
+
+        button {
+            font-size: 35px;
+            width: 75px;
+            height: 75px;
+            cursor: pointer;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            transition: 0.3s;
+            /* لە سەرەتادا دوگمەکان کاڵ دیار دەبن چونکە قفڵن */
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+
+        .plus { background-color: #00b894; }
+        .minus { background-color: #d63031; }
+
+        /* کاتێک قفڵەکە دەکرێتەوە ئەم کلاسە چالاک دەبێت */
+        .unlocked button {
+            opacity: 1;
+            filter: grayscale(0);
+        }
+
+        #lock-btn {
+            margin-top: 25px;
+            width: auto;
+            height: auto;
+            font-size: 14px;
+            padding: 10px 20px;
+            background: #3498db;
+            border-radius: 10px;
+            opacity: 1;
+            filter: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="status-textText">دۆخی سەیرکردن 👁️</h2>
+    <div id="number">0</div>
+    
+    <div id="btn-container" class="controls">
+        <button class="plus" onclick="update(1)" disabled>+</button>
+        <button class="minus" onclick="update(-1)" disabled>-</button>
+    </div>
+
+    <button id="lock-btn" onclick="checkCode()">کردنەوەی قفڵ 🔒</button>
+</div>
+
+<script>
+    let count = localStorage.getItem('my_count') ? parseInt(localStorage.getItem('my_count')) : 0;
+    document.getElementById('number').innerText = count;
+
+    function update(val) {
+        count += val;
+        document.getElementById('number').innerText = count;
+        localStorage.setItem('my_count', count);
+    }
+
+    function checkCode() {
+        const code = prompt("کۆدی نهێنی بنووسە بۆ دەستکاریکردن:");
+        
+        if (code === "6778") {
+            alert("کۆدەکە ڕاستە! ئێستا دەتوانیت دەستکاری بکەیت.");
+            enableButtons();
+        } else {
+            alert("کۆدەکە هەڵەیە! تەنها دەتوانیت سەیری بکەیت.");
+        }
+    }
+
+    function enableButtons() {
+        const container = document.getElementById('btn-container');
+        const buttons = container.getElementsByTagName('button');
+        const statusText = document.getElementById('status-textText');
+        const lockBtn = document.getElementById('lock-btn');
+
+        container.parentElement.classList.add('unlocked');
+        statusText.innerText = "دۆخی دەستکاریکردن ✅";
+        
+        for (let btn of buttons) {
+            btn.disabled = false;
+        }
+        
+        // دوگمەی قفڵەکە ون بکە کاتێک کرایەوە
+        lockBtn.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
